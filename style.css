@@ -1,0 +1,920 @@
+/* --- Base Styles (for Desktop and larger screens - default) --- */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Aligns content to the top */
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.container {
+    display: grid;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Default layout for index.html (Main Menu) */
+.container {
+    grid-template-rows: auto auto; /* Welcome, Nav Panel */
+    grid-template-columns: 1fr; /* Single column */
+}
+/* Ensure default hidden state for simulator/guide elements not on index.html */
+.controls, .eye-container, .bottom-panel, .jcc-guide-container {
+    display: none; 
+}
+
+
+/* Layout for tutor.html */
+.container.tutor-mode-layout {
+    /* Adjusted grid-template-rows to account for the new intro panel */
+    /* Welcome (1), Tutor Intro Panel (2), Simulator Row (3), Feedback Row (4), Guide Row (5) */
+    grid-template-rows: auto auto 1fr auto auto;
+    grid-template-columns: 1fr 2fr 1fr; /* Left, Center (wider), Right */
+}
+
+/* Assign grid areas for tutor.html elements */
+.container.tutor-mode-layout .welcome-message {
+    grid-column: 1 / 4;
+    grid-row: 1;
+    display: block;
+}
+.container.tutor-mode-layout #tutorIntroPanel { /* New Intro Panel */
+    grid-column: 1 / 4;
+    grid-row: 2;
+    display: flex; /* Ensure it's displayed as flex */
+}
+
+/* The actual simulator content that will be hidden/shown by JS */
+.container.tutor-mode-layout #tutorSimulatorContent {
+    /* `display: contents` makes the children participate directly in the parent grid.
+       This is useful here because `tutorSimulatorContent` is just a wrapper for hiding/showing,
+       and its children (.left-panel, .center-panel, etc.) need to occupy the main grid cells. */
+    grid-column: 1 / 4; /* Spans all columns of the main grid */
+    grid-row: 3 / 6; /* Spans from row 3 to the end (row 5) of the main grid */
+    display: contents; /* Allows children to be placed by the main grid */
+}
+
+/* Existing rules for .left-panel, .center-panel etc. should now be assigned correct grid-rows within the main container */
+/* These elements are direct children of the main .container, even when wrapped in #tutorSimulatorContent which uses display:contents */
+.container.tutor-mode-layout .left-panel { grid-column: 1; grid-row: 3; display: flex;} /* Ensure display:flex */
+.container.tutor-mode-layout .center-panel { grid-column: 2; grid-row: 3; display: flex;} /* Ensure display:flex */
+.container.tutor-mode-layout .right-panel { grid-column: 3; grid-row: 3; display: flex;} /* Ensure display:flex */
+.container.tutor-mode-layout .bottom-panel { grid-column: 2 / 3; grid-row: 4; display: block;} /* Ensure display:block */
+.container.tutor-mode-layout .jcc-guide-container { grid-column: 1 / 4; grid-row: 5; display: block; } /* Ensure display:block */
+
+/* Ensure .navigation-panel (which tutorIntroPanel uses) is hidden when #tutorSimulatorContent is active,
+   but is visible for the intro screen */
+.container.tutor-mode-layout .navigation-panel {
+    /* Default state, will be overridden by #tutorIntroPanel specifics or .hidden class */
+}
+
+
+/* Layout for practice.html */
+.container.practice-mode-layout {
+    grid-template-rows: auto auto 1fr auto; /* Welcome, Practice Controls, Simulator Area (flexible), Patient Feedback */
+    grid-template-columns: 1fr 2fr 1fr; /* Left, Center (wider), Right */
+}
+.container.practice-mode-layout .controls,
+.container.practice-mode-layout .eye-container,
+.container.practice-mode-layout .bottom-panel {
+    display: flex; /* Override default hidden, adjust per element */
+}
+.container.practice-mode-layout .navigation-panel,
+.container.practice-mode-layout .jcc-guide-container {
+    display: none; /* Hide nav panel and guide on practice mode */
+}
+/* Assign grid areas for practice.html */
+.container.practice-mode-layout .welcome-message { grid-column: 1 / 4; grid-row: 1; display: block; }
+.container.practice-mode-layout .back-to-menu-panel { grid-column: 1 / 4; grid-row: 2; display: flex; } /* Ensure this panel is visible */
+.container.practice-mode-layout .left-panel { grid-column: 1; grid-row: 3; }
+.container.practice-mode-layout .center-panel { grid-column: 2; grid-row: 3; }
+.container.practice-mode-layout .right-panel { grid-column: 3; grid-row: 3; }
+.container.practice-mode-layout .bottom-panel { grid-column: 2 / 3; grid-row: 4; }
+
+
+.welcome-message {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    /* Display: block added by default grid assignments */
+}
+
+/* Style for the main navigation panel on index.html */
+.navigation-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+    text-align: center;
+    /* Grid assignment handled by .container default */
+}
+.navigation-panel h2 {
+    color: #333;
+    margin: 0;
+    font-size: 1.5em;
+}
+.navigation-panel button {
+    width: 60%; 
+    max-width: 300px;
+}
+.practice-button.easy-mode {
+    background-color: #17a2b8; 
+}
+.practice-button.easy-mode:hover {
+    background-color: #138496;
+}
+.practice-button.hard-mode {
+    background-color: #ffc107; 
+    color: #333; 
+}
+.practice-button.hard-mode:hover {
+    background-color: #e0a800;
+}
+
+
+/* Style for Back to Menu/Next/Restart buttons on practice.html and tutor.html */
+/* NOTE: practiceControlPanel is for practice.html, tutorBackToMenuButton is for tutor.html */
+.back-to-menu-panel { /* This targets practice.html's top control panel */
+    display: flex; /* Overridden by .container.practice-mode-layout for proper grid positioning */
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px; 
+    padding: 10px;
+    background-color: #e2e6ea;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.back-to-menu-panel button {
+    flex-grow: 1; 
+    padding: 8px 12px;
+    margin: 0; 
+}
+.back-to-menu-button { /* This targets tutor.html's single back button AND practice.html's back button */
+    background-color: #6c757d;
+}
+.back-to-menu-button:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+
+/* JCC Procedure Guide Styling (Desktop) */
+.jcc-guide-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 800px; 
+    width: 100%;
+    margin: 20px auto; 
+    overflow-y: auto; 
+    max-height: 70vh; 
+    /* Display controlled by .container.tutor-mode-layout */
+}
+.jcc-guide-container h1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2.2em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+.jcc-guide-container h2 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #007bff;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    border-left: 5px solid #007bff;
+    padding-left: 15px;
+}
+.jcc-guide-container h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #495057;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+.guide-intro {
+    font-size: 1.1em;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #555;
+}
+.procedure-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f1f7ff;
+    border: 1px solid #d0e0f0;
+}
+.procedure-section:last-child {
+    margin-bottom: 0;
+}
+.section-content {
+    padding-left: 10px;
+}
+.jcc-guide-container p, .jcc-guide-container ul {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 1em;
+}
+.jcc-guide-container ul {
+    list-style-type: disc;
+    padding-left: 25px;
+}
+.jcc-guide-container li {
+    margin-bottom: 0.5em;
+}
+/* Color Coding for JCC Elements */
+.jcc-red-text {
+    color: #dc3545;
+    font-weight: bold;
+}
+.jcc-green-text {
+    color: #28a745;
+    font-weight: bold;
+}
+/* Action Highlighting */
+.tip-action {
+    display: block;
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-left: 4px solid #ffc107;
+    background-color: #fffde7;
+    font-style: italic;
+    font-size: 0.95em;
+}
+.bold {
+    font-weight: bold;
+}
+.highlight {
+    background-color: #d1ecf1;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+/* Power Adjustment Specific Colors */
+.power-increase {
+    color: #dc3545;
+    font-weight: bold;
+}
+.power-decrease {
+    color: #28a745;
+    font-weight: bold;
+}
+.final-tip {
+    font-style: italic;
+    text-align: center;
+    margin-top: 30px;
+    color: #6c757d;
+    font-size: 0.95em;
+}
+
+
+.left-panel {
+    display: flex; /* Overridden by .container.tutor/practice-mode-layout */
+    flex-direction: column;
+    gap: 20px;
+}
+
+.right-panel {
+    display: flex; /* Overridden by .container.tutor/practice-mode-layout */
+    flex-direction: column;
+    gap: 20px;
+}
+
+.center-panel {
+    display: flex; /* Overridden by .container.tutor/practice-mode-layout */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.bottom-panel {
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    /* Display controlled by .container.tutor/practice-mode-layout */
+}
+
+.section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.instructions-box, .feedback-box, .rx-display {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 50px;
+    background-color: #e9f7ff;
+    color: #333;
+    line-height: 1.4;
+}
+
+.feedback-box {
+    background-color: #fff3e0;
+}
+
+.rx-display {
+    font-weight: bold;
+    color: #0056b3;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.axis-svg-slider {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    position: relative;
+    cursor: grab;
+    touch-action: none;
+}
+
+.axis-svg-slider.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.axis-svg-slider svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+}
+
+.axis-svg-slider .slider-track {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 4;
+}
+
+.axis-svg-slider .slider-thumb {
+    fill: #007bff;
+    stroke: #fff;
+    stroke-width: 2;
+    cursor: grab;
+    pointer-events: all;
+    r: 8; /* Default thumb radius for desktop */
+}
+
+.axis-line {
+    stroke: #007bff;
+    stroke-width: 2;
+    pointer-events: none;
+}
+
+/* --- Eye and Lens/JCC Styling --- */
+.eye-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+}
+
+.eye {
+    width: 200px;
+    height: 200px;
+    background-color: #f7f7f7;
+    border: 5px solid #aaa;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trial-lens {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.3);
+    border: 2px solid red;
+    box-sizing: border-box;
+    transform-origin: center;
+    transition: transform 0.1s ease-out;
+}
+
+.lens-axis-indicator {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: red;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.jcc {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-origin: center;
+    transition: transform 0.1s ease-out;
+}
+
+.jcc-handle {
+    position: absolute;
+    width: 60px;
+    height: 8px;
+    background-color: #8B4513;
+    border-radius: 4px;
+    transform-origin: left center;
+    transform: translateX(25px) rotate(0deg);
+}
+
+.jcc-red-line, .jcc-green-line {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    transition: transform 0.1s ease-out;
+}
+
+.jcc-red-line {
+    background-color: red;
+}
+
+.jcc-green-line {
+    background-color: green;
+}
+
+.cylinder-power-display {
+    position: absolute;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #333;
+    white-space: nowrap;
+    pointer-events: none;
+    transform-origin: center center;
+    padding: 2px 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 3px;
+}
+
+.jcc-position-display {
+    position: absolute;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #007bff;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    padding: 3px 8px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(-55px);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 50;
+}
+
+/* Axis Dial */
+.axis-dial {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.dial-marker {
+    position: absolute;
+    transform: rotate(var(--css-angle)) translateX(125px) rotate(calc(0deg - var(--css-angle)));
+    transform-origin: center;
+    font-size: 0.8em;
+    color: #777;
+    width: 30px;
+    text-align: center;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* JCC Notification Box Styles */
+.jcc-notification-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 2px solid #dc3545;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 1000;
+    min-width: 250px;
+    max-width: 80%;
+}
+
+.jcc-notification-box p {
+    font-size: 1.1em;
+    color: #dc3545;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.jcc-notification-box button {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    width: auto;
+    display: inline-block;
+    margin-top: 0;
+}
+
+.jcc-notification-box button:hover {
+    background-color: #c82333;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Specific styling for the Start Tutorial button */
+.start-button {
+    margin-top: 0;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.start-button:hover:not(:disabled) {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+
+/* --- Tablet Media Query (769px to 1024px) --- */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        padding: 15px;
+        align-items: flex-start;
+    }
+
+    /* Container grid definitions for different pages on tablet */
+    .container { /* Default for index.html */
+        grid-template-rows: auto auto; /* Welcome, Nav Panel */
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+        max-width: 95%;
+    }
+    
+    /* Tutor Mode Layout */
+    .container.tutor-mode-layout {
+        /* Adjusted grid-template-rows for tablet */
+        grid-template-rows: auto auto 1fr auto auto auto; /* Welcome, Intro Panel, Center Panel, Left/Right, Feedback, Guide */
+        grid-template-columns: 1fr 1fr;
+    }
+    .container.tutor-mode-layout #tutorIntroPanel { grid-column: 1 / 3; grid-row: 2; }
+    .container.tutor-mode-layout #tutorSimulatorContent {
+        grid-column: 1 / 3;
+        grid-row: 3 / 7; /* Adjusted to span more rows for tablet layout */
+        display: contents; /* Ensure children participate in grid */
+    }
+    .container.tutor-mode-layout .left-panel { grid-column: 1 / 2; grid-row: 4; }
+    .container.tutor-mode-layout .center-panel { grid-column: 1 / 3; grid-row: 3; }
+    .container.tutor-mode-layout .right-panel { grid-column: 2 / 3; grid-row: 4; }
+    .container.tutor-mode-layout .bottom-panel { grid-column: 1 / 3; grid-row: 5; }
+    .container.tutor-mode-layout .jcc-guide-container { grid-column: 1 / 3; grid-row: 6; }
+
+
+    /* Practice Mode Layout */
+    .container.practice-mode-layout {
+        grid-template-rows: auto auto 1fr auto auto; /* Welcome, Practice Controls, Simulator Area, Left/Right, Feedback */
+        grid-template-columns: 1fr 1fr;
+    }
+    .container.practice-mode-layout .welcome-message { grid-column: 1 / 3; grid-row: 1; }
+    .container.practice-mode-layout .back-to-menu-panel { grid-column: 1 / 3; grid-row: 2; }
+    .container.practice-mode-layout .left-panel { grid-column: 1 / 2; grid-row: 4; }
+    .container.practice-mode-layout .center-panel { grid-column: 1 / 3; grid-row: 3; }
+    .container.practice-mode-layout .right-panel { grid-column: 2 / 3; grid-row: 4; }
+    .container.practice-mode-layout .bottom-panel { grid-column: 1 / 3; grid-row: 5; }
+
+
+    .welcome-message {
+        margin-bottom: 15px;
+    }
+    
+    .navigation-panel, .back-to-menu-panel {
+        margin-bottom: 15px;
+        flex-direction: row; 
+        justify-content: space-around;
+        padding: 15px; 
+    }
+    .navigation-panel h2 { font-size: 1.4em; }
+    .navigation-panel button { width: 45%; max-width: none; font-size: 0.95em; } 
+    .back-to-menu-panel button { width: auto; font-size: 0.95em; padding: 10px 15px; }
+
+
+    .jcc-guide-container {
+        padding: 20px;
+        margin: 15px auto;
+        max-width: 100%;
+        max-height: 60vh;
+    }
+    .jcc-guide-container h1 { font-size: 1.8em; }
+    .jcc-guide-container h2 { font-size: 1.5em; }
+    .jcc-guide-container h3 { font-size: 1.2em; }
+    .jcc-guide-container p, .jcc-guide-container ul { font-size: 0.95em; }
+
+    .bottom-panel {
+        padding-top: 15px;
+    }
+
+    /* Adjust eye & dial sizes for tablet */
+    .eye-container {
+        width: 280px;
+        height: 280px;
+        margin: 15px auto;
+    }
+    .eye {
+        width: 180px;
+        height: 180px;
+    }
+    .trial-lens {
+        width: 160px;
+        height: 160px;
+    }
+    .jcc {
+        width: 130px;
+        height: 130px;
+    }
+    .axis-dial {
+        width: 230px;
+        height: 230px;
+    }
+    .dial-marker {
+        transform: rotate(var(--css-angle)) translateX(115px) rotate(calc(0deg - var(--css-angle)));
+    }
+
+    .axis-svg-slider {
+        height: 90px;
+    }
+    .axis-svg-slider .slider-thumb {
+        r: 10; 
+        stroke-width: 2.5; 
+    }
+    .axis-line {
+        stroke-width: 2.5; 
+    }
+}
+
+
+/* --- Mobile Media Query (max-width: 768px) --- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    /* Container grid definitions for different pages on mobile */
+    .container { /* Default for index.html */
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto; 
+        gap: 8px;
+        padding: 8px;
+        max-width: 100%;
+    }
+    .container.tutor-mode-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto; /* Stacks everything */
+    }
+    .container.tutor-mode-layout .welcome-message,
+    .container.tutor-mode-layout #tutorIntroPanel, /* Include the new intro panel */
+    .container.tutor-mode-layout #tutorSimulatorContent { /* Include the simulator wrapper */
+        grid-column: 1 / 2;
+        grid-row: auto;
+        margin-bottom: 8px; /* Apply margin to these main wrappers */
+    }
+    /* Children of #tutorSimulatorContent will also stack via grid-row: auto; */
+    .container.tutor-mode-layout .left-panel,
+    .container.tutor-mode-layout .center-panel,
+    .container.tutor-mode-layout .right-panel,
+    .container.tutor-mode-layout .bottom-panel,
+    .container.tutor-mode-layout .jcc-guide-container {
+        grid-column: 1 / 2;
+        grid-row: auto;
+    }
+
+    .container.practice-mode-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto; /* All auto for stacking */
+    }
+
+    .welcome-message {
+        margin-top: 0;
+        padding: 10px 15px;
+        font-size: 1em;
+    }
+
+    .navigation-panel, .back-to-menu-panel {
+        flex-direction: column; 
+        gap: 10px;
+        padding: 15px 10px;
+        margin-bottom: 10px;
+    }
+    .navigation-panel h2 { font-size: 1.3em; margin-bottom: 5px; }
+    .navigation-panel button { width: 90%; max-width: 250px; } 
+    .back-to-menu-panel button { width: 90%; max-width: 250px; } 
+
+
+    .jcc-guide-container {
+        margin-top: 0;
+        padding: 10px 15px;
+        max-height: 65vh; 
+        margin-bottom: 0; 
+    }
+    .jcc-guide-container h1 { font-size: 1.5em; margin-bottom: 12px; padding-bottom: 10px; }
+    .jcc-guide-container h2 { font-size: 1.2em; margin-top: 15px; padding-left: 10px; }
+    .jcc-guide-container h3 { font-size: 0.95em; margin-top: 10px; }
+    .jcc-guide-container p, .jcc-guide-container ul { font-size: 0.85em; }
+    .jcc-guide-container ul { padding-left: 20px; }
+    .jcc-guide-container li { margin-bottom: 0.3em; }
+    .procedure-section {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .tip-action { padding: 5px 8px; font-size: 0.8em; }
+    .final-tip { margin-top: 20px; font-size: 0.85em; }
+
+    .bottom-panel {
+        padding-top: 10px;
+    }
+
+    .section {
+        padding: 10px;
+        gap: 8px;
+    }
+    button {
+        padding: 7px 10px;
+        font-size: 0.85em;
+        margin-top: 8px;
+    }
+    label {
+        margin-top: 8px;
+        margin-bottom: 3px;
+        font-size: 0.9em;
+    }
+    .instructions-box, .feedback-box, .rx-display {
+        padding: 8px;
+        min-height: 40px;
+        font-size: 0.9em;
+    }
+    .rx-display { min-height: 25px; }
+
+
+    /* Adjust eye & dial sizes for mobile */
+    .eye-container {
+        width: 220px;
+        height: 220px;
+        margin: 10px auto;
+    }
+    .eye {
+        width: 140px;
+        height: 140px;
+        border-width: 3px;
+    }
+    .trial-lens {
+        width: 120px;
+        height: 120px;
+        border-width: 1px;
+    }
+    .lens-axis-indicator {
+        height: 1px;
+    }
+    .jcc {
+        width: 90px;
+        height: 90px;
+    }
+    .jcc-handle {
+        width: 40px;
+        height: 5px;
+        transform: translateX(15px) rotate(0deg);
+    }
+    .jcc-red-line, .jcc-green-line {
+        width: 1px;
+    }
+    .cylinder-power-display {
+        font-size: 0.65em;
+        padding: 1px 3px;
+        transform: translate(-50%, -50%); 
+    }
+    .jcc-position-display {
+        font-size: 0.65em;
+        padding: 1px 3px;
+        transform: translate(-50%, -50%) translateY(-35px);
+    }
+    .axis-dial {
+        width: 180px;
+        height: 180px;
+        border-width: 1px;
+    }
+    .dial-marker {
+        transform: rotate(var(--css-angle)) translateX(90px) rotate(calc(0deg - var(--css-angle)));
+        font-size: 0.65em;
+        width: 20px;
+    }
+    
+    .jcc-notification-box {
+        padding: 12px;
+    }
+    .jcc-notification-box p {
+        font-size: 0.95em;
+        margin-bottom: 8px;
+    }
+    .jcc-notification-box button {
+        padding: 7px 12px;
+        font-size: 0.85em;
+    }
+
+    .axis-svg-slider {
+        height: 80px;
+    }
+    .axis-svg-slider .slider-thumb {
+        r: 12;
+        stroke-width: 3;
+    }
+    .axis-line {
+        stroke-width: 3;
+    }
+}

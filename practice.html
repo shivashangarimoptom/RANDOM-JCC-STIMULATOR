@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCC Practice Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container practice-mode-layout">
+        <div id="welcomeMessage" class="welcome-message"></div>
+
+        <!-- Practice Mode Specific Control Panel -->
+        <div class="back-to-menu-panel" id="practiceControlPanel">
+            <button id="backToMenuButton" class="back-to-menu-button">Back to Main Menu</button>
+            <button id="restartPrescriptionButton" class="practice-button">Restart Prescription</button>
+            <button id="nextPrescriptionButton" class="practice-button">Next Prescription</button>
+        </div>
+        <!-- END Practice Mode Specific Control Panel -->
+
+        <!-- Simulator Controls -->
+        <div class="controls left-panel">
+            <div class="section">
+                <h3>JCC Controls</h3>
+                <button id="flipJCC">Flip JCC</button>
+                <label>JCC Handle Angle:</label>
+                <div id="jccAxisSlider" class="axis-svg-slider disabled">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" class="slider-track"></circle>
+                        <line id="jccAxisLine" x1="50" y1="50" x2="90" y2="50" class="axis-line"></line>
+                        <circle cx="90" cy="50" r="8" class="slider-thumb"></circle>
+                    </svg>
+                </div>
+                <span id="jccAngleDisplay">0&deg;</span>
+            </div>
+            <div class="section">
+                <h3>Practice Instructions</h3>
+                <div id="tutorInstructions" class="instructions-box"></div> <!-- Re-using ID for consistency -->
+            </div>
+        </div>
+
+        <div class="eye-container center-panel">
+            <div class="eye">
+                <div class="trial-lens red-lens" id="trialLens">
+                    <div class="lens-axis-indicator"></div>
+                    <div id="cylinderPowerDisplay" class="cylinder-power-display"></div>
+                </div>
+                <div class="jcc" id="jcc">
+                    <div class="jcc-handle"></div>
+                    <div class="jcc-red-line"></div>
+                    <div class="jcc-green-line"></div>
+                    <div id="jccPositionDisplay" class="jcc-position-display"></div>
+                </div>
+            </div>
+            <div class="axis-dial">
+                <div class="dial-marker" style="--css-angle: 0deg;">0</div>
+                <div class="dial-marker" style="--css-angle: 345deg;">15</div>
+                <div class="dial-marker" style="--css-angle: 330deg;">30</div>
+                <div class="dial-marker" style="--css-angle: 315deg;">45</div>
+                <div class="dial-marker" style="--css-angle: 300deg;">60</div>
+                <div class="dial-marker" style="--css-angle: 285deg;">75</div>
+                <div class="dial-marker" style="--css-angle: 270deg;">90</div>
+                <div class="dial-marker" style="--css-angle: 255deg;">105</div>
+                <div class="dial-marker" style="--css-angle: 240deg;">120</div>
+                <div class="dial-marker" style="--css-angle: 225deg;">135</div>
+                <div class="dial-marker" style="--css-angle: 210deg;">150</div>
+                <div class="dial-marker" style="--css-angle: 195deg;">165</div>
+                <div class="dial-marker" style="--css-angle: 180deg;">180</div>
+            </div>
+
+            <div id="jccNotification" class="jcc-notification-box hidden">
+                <p id="notificationMessage"></p>
+                <button id="notificationOkButton">OK</button>
+            </div>
+        </div>
+
+        <div class="controls right-panel">
+            <div class="section">
+                <h3>Lens Controls</h3>
+                <button id="increasePower">Increase Power (-0.25 DC)</button>
+                <button id="decreasePower">Decrease Power (+0.25 DC)</button>
+                <label>Lens Axis:</label>
+                <div id="lensAxisSlider" class="axis-svg-slider disabled">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" class="slider-track"></circle>
+                        <line id="lensAxisLine" x1="50" y1="50" x2="90" y2="50" class="axis-line"></line>
+                        <circle cx="90" cy="50" r="8" class="slider-thumb"></circle>
+                    </svg>
+                </div>
+                <span id="lensAngleDisplay">180&deg;</span>
+                <button id="confirmAxis">Confirm Axis</button>
+                <button id="confirmPower">Confirm Power</button>
+            </div>
+            <div class="section">
+                <h3>Current Trial RX</h3>
+                <div id="currentRX" class="rx-display"></div>
+                <h3>Final Verified RX</h3>
+                <div id="finalRX" class="rx-display"></div>
+            </div>
+        </div>
+
+        <div class="patient-feedback bottom-panel">
+            <h3>Patient Feedback (Continuous)</h3>
+            <div id="patientFeedback" class="feedback-box"></div>
+        </div>
+
+    </div>
+
+    <script src="practice.js"></script>
+</body>
+</html>
